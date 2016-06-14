@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -55,7 +56,7 @@ public class NewsActivity extends AppCompatActivity {
                         Intent intent = new Intent(NewsActivity.this,InfoActivity.class);
                         intent.putExtra("info",parseText.get());
                         intent.putExtra("date",data);
-                        intent.putExtra("details",links);
+                        intent.putStringArrayListExtra("images",links);
                         startActivity(intent);
                     }
                     catch (InterruptedException | ExecutionException e) {
@@ -68,34 +69,33 @@ public class NewsActivity extends AppCompatActivity {
         }
     }
 
-    class ParseText extends AsyncTask<String,Void,String>{
+    class ParseText extends AsyncTask<String,Void,String> {
         @Override
         protected void onPreExecute() {
-            Toast.makeText(NewsActivity.this,"Завантажується інформація",Toast.LENGTH_SHORT).show();
+            Toast.makeText(NewsActivity.this, "Завантажується інформація", Toast.LENGTH_SHORT).show();
         }
+
         @Override
         protected String doInBackground(String... params) {
-            String str= null;
+            String str = null;
             try {
-                Document document =Jsoup.connect(params[0]).get();
-                Element elem= document.select(".eMessage").first();
+                Document document = Jsoup.connect(params[0]).get();
+                Element elem = document.select(".eMessage").first();
                 Elements date = document.select(".dateBar");
                 Elements details = document.select(".eDetails");
                 Elements elm = details.select("img[src]");
-                for(Element element:elm){
-                    links.add(element.attr("src"));
 
+                elements = document.select("img[src$=.jpg]");
+                for (Element element : elements) {
+                    links.add("http://news-kmk-kntu.at.ua" + element.toString().replace("<img style=\"margin:0;padding:0;border:0;\" src=\"", "").replace("\" align=\"\">", "").replace("http://news-kmk-kntu.at.ua",""));
                 }
                 str = elem.text();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-
             return str;
-            }
         }
-
+    }
     class ParseTitle extends AsyncTask<Void,Void,HashMap<String,String>> {
         @Override
         protected HashMap<String, String> doInBackground(Void... params) {
