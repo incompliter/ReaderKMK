@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".MainActivity">
+    <item android:id="@+id/news" android:title="@string/item_news" android:onClick="goToNews"/>
+    <item android:id="@+id/studying" android:title="@string/item_studying" android:onClick="goToStudying"/>
+    <item android:id="@+id/education" android:title="@string/item_education" android:onClick="goToEducation"/>
+    <item android:id="@+id/aboutApp" android:title="@string/item_about" android:onClick="goToAbout"/>
+</menu>
